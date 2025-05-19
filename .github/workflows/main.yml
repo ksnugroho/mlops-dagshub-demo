@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  train:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,3 +39,28 @@ jobs:
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_ACCESS_TOKEN }}
         run: |
           python modelling/modelling_to_dags.py
+
+      - name: Get latest run_id
+        id: get_run
+        run: |
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Run ID is $RUN_ID"
+
+      - name: Build Docker image
+        run: |
+          mlflow models build-docker \
+            --model-uri "runs:/$RUN_ID/model" \
+            --name credit-score-api
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Tag and Push to Docker Hub
+        run: |
+          docker tag credit-score-api ${{ secrets.DOCKER_HUB_USERNAME }}/credit-score-api:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/credit-score-api:latest
+
