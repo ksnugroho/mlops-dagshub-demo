@@ -13,17 +13,23 @@ from sklearn.metrics import (
 )
 
 from dagshub import dagshub_logger
-from preprocessing.preprocessing_pipeline import preprocessing_pipeline
+import dagshub
+
+import warnings
+warnings.filterwarnings("ignore")
 
 # Inisialisasi MLflow untuk DagsHub
-mlflow.set_tracking_uri("https://dagshub.com/ksnugroho/mlops-dagshub-demo.mlflow/")  # Ganti dengan username & repo kamu
-mlflow.set_experiment("credit-risk-model-v1")
+# dagshub.init(repo_owner='ksnugroho', repo_name='mlops-dagshub-demo', mlflow=True)
+os.environ["MLFLOW_TRACKING_USERNAME"] = "ksnugroho"
+os.environ["MLFLOW_TRACKING_PASSWORD"] = "7c100820a613ba9c8b7b157b2bc21fe3afbe1d19"
+mlflow.set_tracking_uri("https://dagshub.com/ksnugroho/mlops-dagshub-demo.mlflow")
+mlflow.set_experiment("credit-risk-model-testv1")
 
 # Buat folder model jika belum ada
 os.makedirs("model", exist_ok=True)
 
 # Ambil data dari pipeline
-train_df, _ = preprocessing_pipeline("data/train_cleaned.csv")
+train_df = pd.read_csv("data/train_pca.csv")
 X = train_df.drop("Credit_Score", axis=1)
 y = train_df["Credit_Score"]
 
@@ -33,8 +39,8 @@ input_example = X_train.iloc[:5]
 
 # Hyperparameter tuning
 param_grid = {
-    "n_estimators": [100, 300, 505],
-    "max_depth": [10, 20, 37]
+    "n_estimators": [100],
+    "max_depth": [10]
 }
 grid_search = GridSearchCV(
     estimator=RandomForestClassifier(random_state=42),

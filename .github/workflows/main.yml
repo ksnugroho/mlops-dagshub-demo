@@ -29,6 +29,10 @@ jobs:
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
+      - name: Run preprocessing script
+        run: |
+          python preprocessing/preprocessing_pipeline.py
+
       - name: Run training script
         run: |
           python modelling/modelling_to_dags.py

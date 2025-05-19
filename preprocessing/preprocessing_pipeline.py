@@ -118,5 +118,11 @@ def preprocessing_pipeline(csv_path):
     # 7. Simpan hasil
     train_final = pd.concat([X_train, pd.Series(y_train_enc, name='Credit_Score')], axis=1)
     test_final = pd.concat([X_test, pd.Series(y_test_enc, name='Credit_Score')], axis=1)
+    
+    train_final.to_csv("data/train_pca.csv", index=False)
+    test_final.to_csv("data/test_pca.csv", index=False)
+    
+    print("Preprocessing completed and data saved to 'data/'")
 
-    return train_final, test_final
+if __name__ == "__main__":
+    preprocessing_pipeline("data/train_cleaned.csv")
