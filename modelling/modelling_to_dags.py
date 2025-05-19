@@ -39,8 +39,8 @@ input_example = X_train.iloc[:5]
 
 # Hyperparameter tuning
 param_grid = {
-    "n_estimators": [100],
-    "max_depth": [10]
+    "n_estimators": [100, 300, 505],
+    "max_depth": [10, 20, 37]
 }
 grid_search = GridSearchCV(
     estimator=RandomForestClassifier(random_state=42),
