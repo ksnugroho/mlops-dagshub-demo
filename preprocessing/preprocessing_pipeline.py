@@ -120,10 +120,3 @@ def preprocessing_pipeline(csv_path):
     test_final = pd.concat([X_test, pd.Series(y_test_enc, name='Credit_Score')], axis=1)
 
     return train_final, test_final
-
-if __name__ == "__main__":
-    file_path = 'train_cleaned.csv'
-    train_final, test_final = preprocessing_pipeline(file_path)
-    train_final.to_csv("train_pca.csv", index=False)
-    test_final.to_csv("test_pca.csv", index=False)
-    print('Preprocessing pipeline done!')
