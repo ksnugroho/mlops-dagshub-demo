@@ -58,6 +58,10 @@ jobs:
           echo "Latest Run ID: $RUN_ID"
 
       - name: Build Docker image
+        env:
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_ACCESS_TOKEN }}
+          MLFLOW_TRACKING_URI: https://dagshub.com/ksnugroho/mlops-dagshub-demo.mlflow
         run: |
           mlflow models build-docker \
             --model-uri "runs:/$RUN_ID/model" \
