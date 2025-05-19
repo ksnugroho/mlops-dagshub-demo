@@ -100,6 +100,6 @@ with mlflow.start_run():
     # Log model ke MLflow (dengan input_example)
     mlflow.sklearn.log_model(
         sk_model=best_model,
-        artifact_path="sk_model",
+        artifact_path="model",
         input_example=input_example
     )
