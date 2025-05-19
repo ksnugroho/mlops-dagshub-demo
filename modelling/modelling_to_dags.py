@@ -19,10 +19,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Inisialisasi MLflow untuk DagsHub
-# dagshub.init(repo_owner='ksnugroho', repo_name='mlops-dagshub-demo', mlflow=True)
-os.environ["MLFLOW_TRACKING_USERNAME"] = "ksnugroho"
-os.environ["MLFLOW_TRACKING_PASSWORD"] = "7c100820a613ba9c8b7b157b2bc21fe3afbe1d19"
-mlflow.set_tracking_uri("https://dagshub.com/ksnugroho/mlops-dagshub-demo.mlflow")
+# Set token: https://dagshub.com/user/settings/tokens
+mlflow.set_tracking_uri("https://dagshub.com/ksnugroho/mlops-dagshub-demo.mlflow") # Ganti dengan URI kamu
 mlflow.set_experiment("credit-risk-model-testv1")
 
 # Buat folder model jika belum ada
@@ -39,8 +37,8 @@ input_example = X_train.iloc[:5]
 
 # Hyperparameter tuning
 param_grid = {
-    "n_estimators": [100, 300, 505],
-    "max_depth": [10, 20, 37]
+    "n_estimators": [100, 300],
+    "max_depth": [10]
 }
 grid_search = GridSearchCV(
     estimator=RandomForestClassifier(random_state=42),
