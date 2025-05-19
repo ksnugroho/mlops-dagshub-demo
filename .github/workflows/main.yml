@@ -40,12 +40,22 @@ jobs:
         run: |
           python modelling/modelling_to_dags.py
 
-      - name: Get latest run_id
+      - name: Get latest run_id from DagsHub
         id: get_run
+        env:
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_ACCESS_TOKEN }}
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo '
+          from mlflow.tracking import MlflowClient
+
+          client = MlflowClient(tracking_uri="https://dagshub.com/ksnugroho/mlops-dagshub-demo.mlflow")
+          run = client.search_runs(["0"], order_by=["start_time DESC"])[0]
+          print(f"RUN_ID={run.info.run_id}")
+          ' > get_run.py
+          RUN_ID=$(python get_run.py | grep RUN_ID | cut -d'=' -f2)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "Run ID is $RUN_ID"
+          echo "Latest Run ID: $RUN_ID"
 
       - name: Build Docker image
         run: |
