@@ -73,7 +73,7 @@ with mlflow.start_run():
     plt.savefig("model/training_confusion_matrix.png")
     mlflow.log_artifact("model/training_confusion_matrix.png")
 
-    # Classification Report (HTML)
+    # Save classification Report (HTML)
     html_report = classification_report(y_test, y_pred, output_dict=True)
     html_content = f"""
     <html>
@@ -100,6 +100,6 @@ with mlflow.start_run():
     # Log model ke MLflow (dengan input_example)
     mlflow.sklearn.log_model(
         sk_model=best_model,
-        artifact_path="model",
+        artifact_path="sk_model",
         input_example=input_example
     )
